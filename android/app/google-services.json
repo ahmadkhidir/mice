@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "941112722412",
+    "project_id": "mice-1fa77",
+    "storage_bucket": "mice-1fa77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941112722412:android:42d0b90328e63f1ea036c9",
+        "android_client_info": {
+          "package_name": "com.example.mice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "941112722412-2ac2rqf0hg2nsu6p8n3nrg562f3116im.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAU0xjTuqQf_vFGeDdKXcUmFeKxBm2p_aI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "941112722412-2ac2rqf0hg2nsu6p8n3nrg562f3116im.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
