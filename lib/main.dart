@@ -20,8 +20,8 @@ class Mice extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<EmailAndPasswordNotifier>(
-          create: (context) => EmailAndPasswordNotifier(),
+        ChangeNotifierProvider<FireBaseAuthNotifier>(
+          create: (context) => FireBaseAuthNotifier(),
         ),
         ChangeNotifierProvider<GoogleSignInNotifier>(
           create: (context) => GoogleSignInNotifier(),

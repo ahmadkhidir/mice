@@ -6,8 +6,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 Future<String?> emailAndPassword(BuildContext context,
     {required String email, required String password}) async {
-  EmailAndPasswordNotifier auth =
-      Provider.of<EmailAndPasswordNotifier>(context, listen: false);
+  FireBaseAuthNotifier auth =
+      Provider.of<FireBaseAuthNotifier>(context, listen: false);
   try {
     UserCredential user = await auth.authentication
         .signInWithEmailAndPassword(email: email, password: password);
@@ -15,6 +15,7 @@ Future<String?> emailAndPassword(BuildContext context,
     print('Authenticated ${user.user!.email}');
     return 'authenticated';
   } on FirebaseAuthException catch (e) {
+    print(e.code);
     print(e.message);
     return e.code;
   }

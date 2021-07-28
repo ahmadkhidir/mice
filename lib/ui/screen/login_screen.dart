@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mice/prototype/firebase/authentication.dart';
+import 'package:mice/prototype/navigator/bouncy_navigator.dart';
 import 'package:mice/prototype/utils/validator.dart';
 
 import 'package:mice/ui/component/custom_text_field_1.dart';
 import 'package:mice/ui/component/custom_button_1.dart';
 import 'package:mice/ui/component/custom_mesenger.dart';
+import 'package:mice/ui/screen/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -88,8 +90,10 @@ class _LoginScreenState extends State<LoginScreen>
                                           email: emailController.text,
                                           password: passwordController.text);
                                       if (auth == 'authenticated') {
-                                        snackBarMessage(context,
-                                            message: 'Successfully Logged In');
+                                        Navigator.push(
+                                            context,
+                                            BouncyNavigator(
+                                                widget: HomeScreen()));
                                       } else if (auth == 'wrong-password') {
                                         snackBarMessage(context,
                                             message: 'Wrong Password!');
@@ -97,6 +101,11 @@ class _LoginScreenState extends State<LoginScreen>
                                         snackBarMessage(context,
                                             message:
                                                 'User not found, please kindly register');
+                                      } else if (auth ==
+                                          'network-request-failed') {
+                                        snackBarMessage(context,
+                                            message:
+                                                'Internet Issue: There might be no internet connection');
                                       } else if (auth == null) {
                                         snackBarMessage(context,
                                             message:
