@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mice/prototype/firebase/authentication.dart';
+import 'package:mice/prototype/firebase/notifier.dart';
+import 'package:mice/prototype/navigator/bouncy_navigator.dart';
+import 'package:mice/ui/component/custom_mesenger.dart';
+import 'package:mice/ui/screen/home_screen.dart';
+
+import 'package:provider/provider.dart';
 
 import 'package:mice/ui/component/custom_button_1.dart';
 import 'package:mice/ui/component/slide_lock.dart';
+
 import 'package:mice/ui/screen/login_screen.dart';
 import 'package:mice/ui/screen/signup_screen.dart';
+
 import 'package:mice/prototype/navigator/right_slide_navigator.dart';
 import 'package:mice/prototype/navigator/left_slide_navigator.dart';
 
@@ -68,7 +77,23 @@ class _SplashScreenState extends State<SplashScreen>
                       label: 'SIGN UP',
                     ),
                   ),
-                  SlideLock(),
+                  SlideLock(onAccept: (value) async {
+                    String? auth = await anonymousAuth(context);
+                    if (auth == 'authenticated') {
+                      Navigator.push(
+                          context, BouncyNavigator(widget: HomeScreen()));
+                    } else if (auth == 'operation-not-allowed') {
+                      snackBarMessage(context,
+                          message: "You're not allowed to sign in Anonymously");
+                    } else if (auth == 'network-request-failed') {
+                      snackBarMessage(context,
+                          message:
+                              'Internet Issue: There might be no internet connection');
+                    } else {
+                      snackBarMessage(context,
+                          message: 'Unexpected Error Occured!');
+                    }
+                  }),
                 ],
               ),
             ),

@@ -85,10 +85,12 @@ class _LoginScreenState extends State<LoginScreen>
                               CustomButton1(
                                   onPressed: () async {
                                     if (_formKey.currentState!.validate()) {
-                                      String? auth = await emailAndPassword(
-                                          context,
-                                          email: emailController.text,
-                                          password: passwordController.text);
+                                      String? auth =
+                                          await signInWithEmailAndPassword(
+                                              context,
+                                              email: emailController.text,
+                                              password:
+                                                  passwordController.text);
                                       if (auth == 'authenticated') {
                                         Navigator.push(
                                             context,
@@ -125,9 +127,8 @@ class _LoginScreenState extends State<LoginScreen>
                           padding: const EdgeInsets.only(top: 20.0),
                           child: CustomButton1(
                               onPressed: () async {
-                                GoogleSignInAccount? user =
-                                    await googleSignIn(context);
-                                if (user != null) {
+                                String? auth = await googleSignIn(context);
+                                if (auth == 'authenticated') {
                                   snackBarMessage(context,
                                       message:
                                           'Successfully Logged In with Google');

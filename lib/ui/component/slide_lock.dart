@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SlideLock extends StatefulWidget {
-  const SlideLock({
-    Key? key,
-  }) : super(key: key);
-
+  const SlideLock({Key? key, Function(dynamic)? this.onAccept})
+      : super(key: key);
+  final onAccept;
   @override
   _SlideLockState createState() => _SlideLockState();
 }
@@ -74,7 +73,7 @@ class _SlideLockState extends State<SlideLock> {
               }
             },
             onWillAccept: (data) => data == 200,
-            onAccept: (data) => null,
+            onAccept: (data) => widget.onAccept(data),
           ),
           Draggable<int>(
             data: 200,

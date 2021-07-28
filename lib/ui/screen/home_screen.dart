@@ -28,13 +28,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Text(context
-          .read<FireBaseAuthNotifier>()
-          .authentication
-          .currentUser!
-          .email!),
-    );
+    return Scaffold();
   }
 }

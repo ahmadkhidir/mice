@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:mice/prototype/firebase/notifier.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-Future<String?> emailAndPassword(BuildContext context,
+Future<String?> signInWithEmailAndPassword(BuildContext context,
     {required String email, required String password}) async {
   FireBaseAuthNotifier auth =
       Provider.of<FireBaseAuthNotifier>(context, listen: false);
@@ -21,15 +21,45 @@ Future<String?> emailAndPassword(BuildContext context,
   }
 }
 
-Future<GoogleSignInAccount?> googleSignIn(BuildContext context) async {
-  GoogleSignInNotifier auth =
-      Provider.of<GoogleSignInNotifier>(context, listen: false);
-  final googleSignIn = auth.googleSignIn;
+Future<String?> anonymousAuth(BuildContext context) async {
+  FireBaseAuthNotifier auth =
+      Provider.of<FireBaseAuthNotifier>(context, listen: false);
+
   try {
-    GoogleSignInAccount? user = await googleSignIn.signIn();
-    return user;
+    UserCredential user = await auth.authentication.signInAnonymously();
+    auth.notifyListeners();
+    print('Authenticated ${user.user!.uid}');
+    return 'authenticated';
+  } on FirebaseAuthException catch (e) {
+    print(e.code);
+    print(e.message);
+    return e.code;
+  }
+}
+
+Future<String?> googleSignIn(BuildContext context) async {
+  GoogleSignInNotifier googleAuth =
+      Provider.of<GoogleSignInNotifier>(context, listen: false);
+  FireBaseAuthNotifier auth =
+      Provider.of<FireBaseAuthNotifier>(context, listen: false);
+
+  final googleSignIn = googleAuth.googleSignIn;
+  try {
+    GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication? googleSignInAuthentication =
+        await googleSignInAccount?.authentication;
+    final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication!.accessToken,
+        idToken: googleSignInAuthentication.idToken);
+    await auth.authentication.signInWithCredential(credential);
+    googleAuth.notifyListeners();
+    return 'authenticated';
+  } on FirebaseAuthException catch (error) {
+    print(error.message);
+    return 'error';
+    // return null;
   } catch (error) {
-    print(error);
-    return null;
+    print('error');
+    return 'error';
   }
 }
