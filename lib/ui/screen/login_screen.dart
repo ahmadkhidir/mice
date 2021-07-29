@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mice/prototype/firebase/authentication.dart';
 import 'package:mice/prototype/navigator/bouncy_navigator.dart';
 import 'package:mice/prototype/utils/validator.dart';
@@ -85,12 +84,9 @@ class _LoginScreenState extends State<LoginScreen>
                               CustomButton1(
                                   onPressed: () async {
                                     if (_formKey.currentState!.validate()) {
-                                      String? auth =
-                                          await signInWithEmailAndPassword(
-                                              context,
-                                              email: emailController.text,
-                                              password:
-                                                  passwordController.text);
+                                      String? auth = await signIn(context,
+                                          email: emailController.text,
+                                          password: passwordController.text);
                                       if (auth == 'authenticated') {
                                         Navigator.push(
                                             context,

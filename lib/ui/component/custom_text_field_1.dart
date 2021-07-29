@@ -47,6 +47,53 @@ class CustomTextField1 extends StatelessWidget {
   }
 }
 
+class CustomTextField2 extends StatelessWidget {
+  const CustomTextField2({
+    Key? key,
+    required TextEditingController this.controller,
+    required String this.labelText,
+    bool this.obscureText = false,
+  }) : super(key: key);
+
+  final labelText;
+  final controller;
+  final obscureText;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 270,
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: labelText,
+          contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xFFD23766),
+              width: 2,
+            ),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xFFD23766),
+              width: 2,
+            ),
+          ),
+          labelStyle: TextStyle(
+            color: Color(0xFFD23766),
+            fontSize: 16,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+        ),
+        cursorColor: Color(0xFFD23766),
+        style: TextStyle(color: Color(0xFFD23766), fontSize: 16),
+        // cursorHeight: 25,
+        obscureText: obscureText,
+      ),
+    );
+  }
+}
+
 class CustomTextFormField1 extends StatelessWidget {
   const CustomTextFormField1({
     Key? key,

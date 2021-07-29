@@ -73,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen>
                     padding: const EdgeInsets.only(bottom: 20),
                     child: CustomButton1(
                       onPressed: () => Navigator.push(
-                          context, RightSlideNavigator(widget: SignupScreen())),
+                          context, RightSlideNavigator(widget: SignUpScreen())),
                       label: 'SIGN UP',
                     ),
                   ),

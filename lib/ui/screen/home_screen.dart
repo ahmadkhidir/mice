@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mice/prototype/firebase/notifier.dart';
 
@@ -28,6 +29,14 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: StreamBuilder(
+        stream:
+            context.read<FireBaseAuthNotifier>().authentication.userChanges(),
+        builder: (context, AsyncSnapshot<User?> snapshot) {
+          return Text('${snapshot.data!.phoneNumber}');
+        },
+      ),
+    );
   }
 }
