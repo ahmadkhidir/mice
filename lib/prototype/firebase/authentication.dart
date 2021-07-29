@@ -57,22 +57,30 @@ Future<String?> signUp(BuildContext context,
           context: context,
           builder: (context) => AlertDialog(
             title: Text('Enter SMS Code sent to $fullPhoneNumber'),
-            content: Column(
-              children: [
-                CustomTextField2(
-                    controller: sentCodeController, labelText: 'Code here'),
-                CustomButton1(
-                    onPressed: () async {
-                      final credential = PhoneAuthProvider.credential(
-                          verificationId: verificationId,
-                          smsCode: sentCodeController.text);
-                      user.user!.updatePhoneNumber(credential);
-                      auth.notifyListeners();
-                      Navigator.push(
-                          context, BouncyNavigator(widget: HomeScreen()));
-                    },
-                    label: 'Done'),
-              ],
+            content: SizedBox(
+              height: 200,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: CustomTextField2(
+                        controller: sentCodeController, labelText: 'Code here'),
+                  ),
+                  CustomButton1(
+                      onPressed: () async {
+                        final credential = PhoneAuthProvider.credential(
+                            verificationId: verificationId,
+                            smsCode: sentCodeController.text);
+                        user.user!.updatePhoneNumber(credential);
+                        auth.notifyListeners();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            BouncyNavigator(widget: HomeScreen()),
+                            (route) => false);
+                      },
+                      label: 'Done'),
+                ],
+              ),
             ),
           ),
         );

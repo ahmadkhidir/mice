@@ -113,14 +113,18 @@ class _SignUpScreenState extends State<SignUpScreen>
                                         phoneNumber: phoneNumberController.text,
                                       );
                                       if (auth == 'verify-otp') {
-                                        print('verify otp');
-                                      } else if (auth == 'wrong-password') {
-                                        snackBarMessage(context,
-                                            message: 'Wrong Password!');
-                                      } else if (auth == 'user-not-found') {
                                         snackBarMessage(context,
                                             message:
-                                                'User not found, please kindly register');
+                                                'Waiting for verification');
+                                      } else if (auth == 'weak-password') {
+                                        snackBarMessage(context,
+                                            message:
+                                                'Your password is too weak!, use a strong password');
+                                      } else if (auth ==
+                                          'email-already-in-use') {
+                                        snackBarMessage(context,
+                                            message:
+                                                'The email address is already in use by another account');
                                       } else if (auth ==
                                           'network-request-failed') {
                                         snackBarMessage(context,

@@ -44,6 +44,17 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     Size screen = MediaQuery.of(context).size;
     hideNavBar();
+    context
+        .read<FireBaseAuthNotifier>()
+        .authentication
+        .authStateChanges()
+        .listen((event) {
+      if (event != null) {
+        snackBarMessage(context, message: "You're logged in as ${event.email}");
+        Navigator.pushAndRemoveUntil(context,
+            RightSlideNavigator(widget: HomeScreen()), (route) => false);
+      }
+    });
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
@@ -55,7 +66,6 @@ class _SplashScreenState extends State<SplashScreen>
             Image.asset(
               'assets/image/logo.gif',
               height: 120,
-              // width: 100,
             ),
             Container(
               margin: EdgeInsets.only(top: 300),
@@ -80,8 +90,10 @@ class _SplashScreenState extends State<SplashScreen>
                   SlideLock(onAccept: (value) async {
                     String? auth = await anonymousAuth(context);
                     if (auth == 'authenticated') {
-                      Navigator.push(
-                          context, BouncyNavigator(widget: HomeScreen()));
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          BouncyNavigator(widget: HomeScreen()),
+                          (route) => false);
                     } else if (auth == 'operation-not-allowed') {
                       snackBarMessage(context,
                           message: "You're not allowed to sign in Anonymously");
