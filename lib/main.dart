@@ -33,6 +33,7 @@ class Mice extends StatelessWidget {
         home: SplashScreen(),
         theme: ThemeData(
           backgroundColor: Color(0xFFD23766),
+          splashColor: Color(0XFFF6D8E1),
         ),
       ),
     );

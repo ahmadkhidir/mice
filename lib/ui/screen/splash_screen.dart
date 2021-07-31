@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mice/prototype/firebase/authentication.dart';
@@ -8,7 +9,7 @@ import 'package:mice/ui/screen/home_screen.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:mice/ui/component/custom_button_1.dart';
+import 'package:mice/ui/component/custom_button.dart';
 import 'package:mice/ui/component/slide_lock.dart';
 
 import 'package:mice/ui/screen/login_screen.dart';
@@ -42,81 +43,101 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    Size screen = MediaQuery.of(context).size;
-    hideNavBar();
-    context
-        .read<FireBaseAuthNotifier>()
-        .authentication
-        .authStateChanges()
-        .listen((event) {
-      if (event != null) {
-        snackBarMessage(context, message: "You're logged in as ${event.email}");
-        Navigator.pushAndRemoveUntil(context,
-            RightSlideNavigator(widget: HomeScreen()), (route) => false);
+    Future<bool?> userCheck() async {
+      bool a = false;
+      try {
+        User? user =
+            await Provider.of<FireBaseAuthNotifier>(context, listen: false)
+                .authentication
+                .idTokenChanges()
+                .first;
+
+        await Future.delayed(Duration(seconds: 1)).then((value) {
+          if (user != null) {
+            print('true');
+            Navigator.of(context).pushAndRemoveUntil(
+                RightSlideNavigator(widget: HomeScreen()), (route) => false);
+            snackBarMessage(context, message: 'Logged in as ${user.email}');
+            a = true;
+          }
+        });
+      } on FlutterError catch (e) {
+        a = false;
       }
-    });
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: Container(
-        width: screen.width,
-        height: screen.height,
-        child: ListView(
-          padding: EdgeInsets.only(top: 130, left: 50, right: 50, bottom: 50),
-          children: [
-            Image.asset(
-              'assets/image/logo.gif',
-              height: 120,
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 300),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: CustomButton1(
-                      onPressed: () => Navigator.push(
-                          context, LeftSlideNavigator(widget: LoginScreen())),
-                      label: 'LOG IN',
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: CustomButton1(
-                      onPressed: () => Navigator.push(
-                          context, RightSlideNavigator(widget: SignUpScreen())),
-                      label: 'SIGN UP',
-                    ),
-                  ),
-                  SlideLock(onAccept: (value) async {
-                    String? auth = await anonymousAuth(context);
-                    if (auth == 'authenticated') {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          BouncyNavigator(widget: HomeScreen()),
-                          (route) => false);
-                    } else if (auth == 'operation-not-allowed') {
-                      snackBarMessage(context,
-                          message: "You're not allowed to sign in Anonymously");
-                    } else if (auth == 'network-request-failed') {
-                      snackBarMessage(context,
-                          message:
-                              'Internet Issue: There might be no internet connection');
-                    } else {
-                      snackBarMessage(context,
-                          message: 'Unexpected Error Occured!');
-                    }
-                  }),
-                ],
+
+      print('$a 2');
+      return a;
+    }
+
+    Size screen = MediaQuery.of(context).size;
+    systemSettings();
+    return FutureBuilder(
+      initialData: false,
+      future: userCheck(),
+      builder: (context, snapshot) => Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
+        body: Container(
+          width: screen.width,
+          height: screen.height,
+          child: ListView(
+            padding: EdgeInsets.only(top: 130, left: 50, right: 50, bottom: 50),
+            children: [
+              Image.asset(
+                'assets/image/logo.gif',
+                height: 120,
               ),
-            ),
-          ],
+              Container(
+                margin: EdgeInsets.only(top: 300),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: CustomButton1(
+                        onPressed: () => Navigator.push(
+                            context, LeftSlideNavigator(widget: LoginScreen())),
+                        label: 'LOG IN',
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: CustomButton1(
+                        onPressed: () => Navigator.push(context,
+                            RightSlideNavigator(widget: SignUpScreen())),
+                        label: 'SIGN UP',
+                      ),
+                    ),
+                    SlideLock(onAccept: (value) async {
+                      String? auth = await anonymousAuth(context);
+                      if (auth == 'authenticated') {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            BouncyNavigator(widget: HomeScreen()),
+                            (route) => false);
+                      } else if (auth == 'operation-not-allowed') {
+                        snackBarMessage(context,
+                            message:
+                                "You're not allowed to sign in Anonymously");
+                      } else if (auth == 'network-request-failed') {
+                        snackBarMessage(context,
+                            message:
+                                'Internet Issue: There might be no internet connection');
+                      } else {
+                        snackBarMessage(context,
+                            message: 'Unexpected Error Occured!');
+                      }
+                    }),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-Future hideNavBar() async {
+Future systemSettings() async {
   SystemChrome.setEnabledSystemUIOverlays(
       [SystemUiOverlay.top, SystemUiOverlay.bottom]);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

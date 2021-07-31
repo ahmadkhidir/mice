@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mice/prototype/navigator/bouncy_navigator.dart';
-import 'package:mice/ui/component/custom_button_1.dart';
+import 'package:mice/prototype/navigator/right_slide_navigator.dart';
+import 'package:mice/ui/component/custom_button.dart';
 import 'package:mice/ui/component/custom_mesenger.dart';
-import 'package:mice/ui/component/custom_text_field_1.dart';
+import 'package:mice/ui/component/custom_text_field.dart';
 import 'package:mice/ui/screen/home_screen.dart';
+import 'package:mice/ui/screen/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:mice/prototype/firebase/notifier.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -135,5 +137,21 @@ Future<String?> googleSignIn(BuildContext context) async {
   } catch (error) {
     print('error');
     return 'error';
+  }
+}
+
+Future<void> signOut(BuildContext context) async {
+  FireBaseAuthNotifier auth =
+      Provider.of<FireBaseAuthNotifier>(context, listen: false);
+
+  try {
+    await auth.authentication.signOut();
+    auth.notifyListeners();
+    Navigator.of(context).pushAndRemoveUntil(
+        RightSlideNavigator(widget: SplashScreen()), (route) => false);
+    snackBarMessage(context, message: 'Successfully Logged Out');
+  } on FirebaseAuthException catch (e) {
+    print(e.code);
+    print(e.message);
   }
 }

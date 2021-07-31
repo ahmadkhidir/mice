@@ -8,8 +8,8 @@ import 'package:mice/prototype/navigator/bouncy_navigator.dart';
 import 'package:mice/prototype/utils/validator.dart';
 import 'package:mice/prototype/firebase/notifier.dart';
 
-import 'package:mice/ui/component/custom_text_field_1.dart';
-import 'package:mice/ui/component/custom_button_1.dart';
+import 'package:mice/ui/component/custom_text_field.dart';
+import 'package:mice/ui/component/custom_button.dart';
 import 'package:mice/ui/component/custom_mesenger.dart';
 import 'package:mice/ui/screen/home_screen.dart';
 
